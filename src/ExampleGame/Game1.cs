@@ -9,6 +9,8 @@ namespace ExampleGame
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
+    private Texture2D _image;
+
     public Game1()
     {
       _graphics = new GraphicsDeviceManager(this);
@@ -16,27 +18,20 @@ namespace ExampleGame
       IsMouseVisible = true;
     }
 
-    protected override void Initialize()
-    {
-      // TODO: Add your initialization logic here
-
-      base.Initialize();
-    }
-
     protected override void LoadContent()
     {
       _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-      // TODO: use this.Content to load your game content here
+      _image = Content.Load<Texture2D>("Images/Image");
     }
 
     protected override void Update(GameTime gameTime)
     {
       if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
           Keyboard.GetState().IsKeyDown(Keys.Escape))
+      {
         Exit();
-
-      // TODO: Add your update logic here
+      }
 
       base.Update(gameTime);
     }
@@ -46,6 +41,8 @@ namespace ExampleGame
       GraphicsDevice.Clear(Color.CornflowerBlue);
 
       // TODO: Add your drawing code here
+
+      _spriteBatch.Draw(_image, Vector2.Zero, Color.White);
 
       base.Draw(gameTime);
     }

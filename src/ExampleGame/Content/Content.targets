@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <MgcbCompress>True</MgcbCompress>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <MgcbItem Include="Content/Images/Image.png" />
+  </ItemGroup>
+
+</Project>

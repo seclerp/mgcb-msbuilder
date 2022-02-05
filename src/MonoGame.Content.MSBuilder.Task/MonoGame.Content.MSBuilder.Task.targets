@@ -186,33 +186,4 @@
       FilesParameter="@(CustomTaskFilesParameter)"/>
   </Target>
 
-  <!--
-    ==============
-    IncludeContent
-    ==============
-    Include ExtraContent as platform-specific content in the project output.
-    Outputs:
-      - AndroidAsset: built content files if Android
-      - BundleResource: built content files if MacOSX or iOS
-      - Content: built content files for all other platforms
-  -->
-  <Target
-    Name="IncludeContent"
-    DependsOnTargets="RunContentBuilder"
-    Condition="'$(EnableMGCBItems)' == 'true' OR '@(MonoGameContentReference)' != ''"
-    Outputs="%(ExtraContent.RecursiveDir)%(ExtraContent.Filename)%(ExtraContent.Extension)"
-    BeforeTargets="PrepareForBuild">
-
-    <!-- Call CreateItem on each piece of ExtraContent so it's easy to switch the item type by platform. -->
-    <CreateItem
-      Include="%(ExtraContent.FullPath)"
-      AdditionalMetadata="Link=$(PlatformResourcePrefix)%(ExtraContent.ContentDir)%(ExtraContent.RecursiveDir)%(ExtraContent.Filename)%(ExtraContent.Extension);CopyToOutputDirectory=PreserveNewest"
-      Condition="'%(ExtraContent.Filename)' != ''">
-      <Output TaskParameter="Include" ItemName="Content" Condition="'$(MonoGamePlatform)' != 'Android' And '$(MonoGamePlatform)' != 'iOS' And '$(MonoGamePlatform)' != 'MacOSX'" />
-      <Output TaskParameter="Include" ItemName="BundleResource" Condition="'$(MonoGamePlatform)' == 'MacOSX' Or '$(MonoGamePlatform)' == 'iOS'" />
-      <Output TaskParameter="Include" ItemName="AndroidAsset" Condition="'$(MonoGamePlatform)' == 'Android'" />
-    </CreateItem>
-
-  </Target>
-
 </Project>

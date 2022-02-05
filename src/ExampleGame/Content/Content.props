@@ -1,7 +1,0 @@
-<Project>
-  <ItemGroup>
-    <MgcbItem Include="Image.png">
-      <Importer>TextureImporter</Importer>
-    </MgcbItem>
-  </ItemGroup>
-</Project>
