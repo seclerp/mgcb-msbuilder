@@ -1,4 +1,4 @@
-# MonoGame.Content.MSBuild
+# MonoGame.Content.MSBuilder
 
 !['main' Build status](../../actions/workflows/build.yml/badge.svg?branch=main)
 
