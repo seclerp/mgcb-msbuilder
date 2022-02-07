@@ -9,11 +9,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 ProjectSection(SolutionItems) = preProject
 	Directory.Build.props = Directory.Build.props
 	Directory.Build.targets = Directory.Build.targets
+	global.json = global.json
 EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Content.MSBuilder.Task", "MonoGame.Content.MSBuilder.Task\MonoGame.Content.MSBuilder.Task.csproj", "{015CB3FB-220F-4085-A9DB-7E5F79C7AD5C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleGame", "ExampleGame\ExampleGame.csproj", "{FFB9B6E9-8020-4A17-80F6-D9042162CEC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Content.MSBuilder.Task", "MonoGame.Content.MSBuilder.Task\MonoGame.Content.MSBuilder.Task.csproj", "{A78A89A8-E9C4-4331-B796-B292F6CCECF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,13 +26,13 @@ Global
 		{04C9C2ED-83E0-45F7-8401-42AE0BD861C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04C9C2ED-83E0-45F7-8401-42AE0BD861C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04C9C2ED-83E0-45F7-8401-42AE0BD861C2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{015CB3FB-220F-4085-A9DB-7E5F79C7AD5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{015CB3FB-220F-4085-A9DB-7E5F79C7AD5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{015CB3FB-220F-4085-A9DB-7E5F79C7AD5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{015CB3FB-220F-4085-A9DB-7E5F79C7AD5C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FFB9B6E9-8020-4A17-80F6-D9042162CEC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FFB9B6E9-8020-4A17-80F6-D9042162CEC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFB9B6E9-8020-4A17-80F6-D9042162CEC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFB9B6E9-8020-4A17-80F6-D9042162CEC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A78A89A8-E9C4-4331-B796-B292F6CCECF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A78A89A8-E9C4-4331-B796-B292F6CCECF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A78A89A8-E9C4-4331-B796-B292F6CCECF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A78A89A8-E9C4-4331-B796-B292F6CCECF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

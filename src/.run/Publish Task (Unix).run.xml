@@ -1,0 +1,12 @@
+﻿<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Publish Task (Unix)" type="RunNativeExe" factoryName="Native Executable">
+    <option name="EXE_PATH" value="/usr/local/share/dotnet/dotnet" />
+    <option name="PROGRAM_PARAMETERS" value="publish" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/MonoGame.Content.MSBuilder.Task" />
+    <option name="PASS_PARENT_ENVS" value="1" />
+    <option name="USE_EXTERNAL_CONSOLE" value="0" />
+    <method v="2">
+      <option name="Build" default="false" projectName="MonoGame.Content.MSBuilder.Task" projectPath="file://$PROJECT_DIR$/MonoGame.Content.MSBuilder.Task/MonoGame.Content.MSBuilder.Task.csproj" />
+    </method>
+  </configuration>
+</component>

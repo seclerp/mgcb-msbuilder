@@ -1,5 +1,11 @@
-﻿<Project>
-  <Target Name="RunMgcbMSBuilder" BeforeTargets="PrepareBuild">
+﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="RunMgcbMSBuilder" BeforeTargets="Build">
+    <PropertyGroup>
+      <CustomTasksAssembly>$(MSBuildThisFileDirectory)\$(MSBuildThisFileName).dll</CustomTasksAssembly>
+    </PropertyGroup>
+
+    <UsingTask TaskName="$(MSBuildThisFileName).MgcbMSBuilderTask" AssemblyFile="$(CustomTasksAssembly)"/>
+
     <PropertyGroup>
       <MgcbObjFolder Condition="$(MgcbObjFolder) == ''">$(MSBuildProjectDirectory)$(IntermediateOutputPath)</MgcbObjFolder>
       <MgcbOutFolder Condition="$(MgcbOutFolder) == ''">$(MSBuildProjectDirectory)$(OutDir)</MgcbOutFolder>

@@ -1,9 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../MonoGame.Content.MSBuilder.Task/MonoGame.Content.MSBuilder.Task.props" />
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
+    <MgcbMSBuilderEnabled Condition="'$(MgcbMSBuilderEnabled)' == ''">False</MgcbMSBuilderEnabled>
+    <MgcbMSBuilderTasksDirectory>$(MSBuildThisFileDirectory)../MonoGame.Content.MSBuilder.Task/bin/Debug/netstandard2.1/publish</MgcbMSBuilderTasksDirectory>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -27,12 +31,12 @@
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <CustomTasksAssembly>$(MSBuildThisFileDirectory)\$(MSBuildThisFileName).dll</CustomTasksAssembly>
-  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Content.MSBuilder.Task\MonoGame.Content.MSBuilder.Task.csproj" />
+  </ItemGroup>
 
-  <UsingTask TaskName="$(MSBuildThisFileName).MgcbMSBuilderTask" AssemblyFile="$(CustomTasksAssembly)" />
-  
-  <Import Project="ExampleGame.targets" />
   <Import Project="Content.props" />
+
+  <Import Project="../MonoGame.Content.MSBuilder.Task/MonoGame.Content.MSBuilder.Task.targets" />
+
 </Project>
