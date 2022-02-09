@@ -11,6 +11,8 @@
       <MgcbContentRoot Condition="'$(MgcbContentRoot)' == ''">$(MSBuildProjectDirectory)</MgcbContentRoot>
       <MgcbObjFolder Condition="'$(MgcbObjFolder)' == ''">$(MSBuildProjectDirectory)/$(BaseIntermediateOutputPath)</MgcbObjFolder>
       <MgcbOutFolder Condition="'$(MgcbOutFolder)' == ''">$(MSBuildProjectDirectory)/$(OutDir)</MgcbOutFolder>
+      <MGCBPath Condition="'$(MGCBPath)' == ''">mgcb</MGCBPath>
+<!--      <UseMgcbTool Condition="'$(UseMgcbTool)' == ''">true</UseMgcbTool>-->
     </PropertyGroup>
 
     <MgcbMSBuilderTask
@@ -19,7 +21,9 @@
       OutFolder="$(MgcbOutFolder)"
       BuildItems="@(MgcbItem)"
       Assemblies="@(MgcbAssembly)"
+      MgcbPath="$(MGCBPath)"
     />
+<!--      UseMgcbTool="$(UseMgcbTool)"-->
   </Target>
 
 </Project>

@@ -1,47 +1,52 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Build.Framework;
-using Microsoft.Xna.Framework.Content.Pipeline;
-using MonoGame.Framework.Content.Pipeline.Builder;
 
 namespace MonoGame.Content.MSBuilder.Task
 {
   // ReSharper disable once UnusedType.Global
   public class MgcbMSBuilderTask : Microsoft.Build.Utilities.Task
   {
+    public string MgcbPath { get; set; }
+
     public string RootFolder { get; set; }
 
     public string ObjFolder { get; set; }
 
     public string OutFolder { get; set; }
 
-    public ITaskItem[] BuildItems { get; set; }
+    public ITaskItem[]? BuildItems { get; set; }
 
-    public ITaskItem[] Assemblies { get; set; }
+    public ITaskItem[]? Assemblies { get; set; }
 
     /// <inheritdoc />
     public override bool Execute()
     {
-      var manager = new PipelineManager(RootFolder, OutFolder, ObjFolder);
-
-      if (Assemblies != null)
-      {
-        foreach (var assembly in Assemblies)
-        {
-          manager.AddAssembly(assembly.ItemSpec);
-        }
-      }
-
       if (BuildItems != null)
       {
+        var builder = new MgcbCommandBuilder(MgcbPath)
+          .WorkingDirectory(RootFolder)
+          .OutputDirectory(OutFolder)
+          .IntermediateDirectory(ObjFolder);
+
+        if (Assemblies != null)
+        {
+          var assemblies = Assemblies.Select(assembly => Path.GetFullPath(assembly.ItemSpec, RootFolder));
+
+          foreach (var assembly in assemblies)
+          {
+            builder.AssemblyReference(assembly);
+          }
+        }
+
         var contentItems = BuildItems.Select(item =>
         {
           var sourceFile = item.ItemSpec;
           var destinationFile = Path.Combine(OutFolder, Path.GetRelativePath(RootFolder, sourceFile));
           var importer = item.GetMetadata("Importer");
           var processor = item.GetMetadata("Processor");
-          var processorParams = new OpaqueDataDictionary();
+          var processorParams = new Dictionary<string, string>();
           foreach (var itemMetadataName in item.MetadataNames)
           {
             var stringMetadataName = itemMetadataName.ToString();
@@ -56,63 +61,21 @@ namespace MonoGame.Content.MSBuilder.Task
 
         foreach (var item in contentItems)
         {
-          manager.RegisterContent(item.SourceFile, item.DestinationFile, item.Importer, item.Processor,
-            item.ProcessorParams);
+          var itemBuilder = builder
+            .BeginItem(item.SourceFile, item.DestinationFile)
+            .Importer(item.Importer)
+            .Processor(item.Processor);
+
+          foreach (var param in item.ProcessorParams)
+          {
+            itemBuilder.ProcessorParam(param.Key, param.Value);
+          }
+
+          itemBuilder.EndItem();
         }
 
-        foreach (var item in contentItems)
-        {
-          try
-          {
-            manager.BuildContent(
-              item.SourceFile,
-              item.DestinationFile,
-              item.Importer,
-              item.Processor,
-              item.ProcessorParams);
-
-            BuildEngine.LogMessageEvent(new BuildMessageEventArgs(item.ToString(), string.Empty,
-              nameof(MgcbMSBuilderTask), MessageImportance.High));
-          }
-          catch (InvalidContentException ex)
-          {
-            var message = string.Empty;
-            if (ex.ContentIdentity != null && !string.IsNullOrEmpty(ex.ContentIdentity.SourceFilename))
-            {
-              message = ex.ContentIdentity.SourceFilename;
-              if (!string.IsNullOrEmpty(ex.ContentIdentity.FragmentIdentifier))
-              {
-                message += "(" + ex.ContentIdentity.FragmentIdentifier + ")";
-              }
-
-              message += ": ";
-            }
-
-            message += ex.Message;
-            // Console.WriteLine(message);
-            // ++errorCount;
-
-            throw;
-          }
-          catch (PipelineException ex)
-          {
-            // Console.Error.WriteLine("{0}: error: {1}", c.SourceFile, ex.Message);
-            // if (ex.InnerException != null)
-            //   Console.Error.WriteLine(ex.InnerException.ToString());
-            // ++errorCount;
-
-            throw;
-          }
-          catch (Exception ex)
-          {
-            // Console.Error.WriteLine("{0}: error: {1}", c.SourceFile, ex.Message);
-            // if (ex.InnerException != null)
-            //   Console.Error.WriteLine(ex.InnerException.ToString());
-            // ++errorCount;
-
-            throw;
-          }
-        }
+        var command = builder.Complete();
+        command.Execute();
       }
 
       return true;
@@ -128,14 +91,14 @@ namespace MonoGame.Content.MSBuilder.Task
 
       public string Processor { get; }
 
-      public OpaqueDataDictionary ProcessorParams { get; }
+      public IDictionary<string, string> ProcessorParams { get; }
 
       public ContentItem(
         string sourceFile,
         string destinationFile,
         string importer,
         string processor,
-        OpaqueDataDictionary processorParams)
+        IDictionary<string, string> processorParams)
       {
         SourceFile = sourceFile;
         DestinationFile = destinationFile;

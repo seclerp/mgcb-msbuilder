@@ -5,6 +5,7 @@
     <Version>1.0.1</Version>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
