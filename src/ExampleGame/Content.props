@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
-    <MgcbCompress>True</MgcbCompress>
+    <UseMgcbTool>true</UseMgcbTool>
+    <MgcbCompress>true</MgcbCompress>
   </PropertyGroup>
 
   <ItemGroup>

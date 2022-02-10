@@ -4,26 +4,113 @@
     <MgcbMSBuilderTasksAssembly>$(MgcbMSBuilderTasksDirectory)/$(MSBuildThisFileName).dll</MgcbMSBuilderTasksAssembly>
   </PropertyGroup>
 
-  <UsingTask Condition="'$(MgcbMSBuilderEnabled)' != 'False'" TaskName="$(MSBuildThisFileName).MgcbMSBuilderTask" AssemblyFile="$(MgcbMSBuilderTasksAssembly)"/>
+  <UsingTask
+    TaskName="$(MSBuildThisFileName).MgcbMSBuilderTask"
+    Condition="'$(MgcbMSBuilderEnabled)' != 'False'"
+    AssemblyFile="$(MgcbMSBuilderTasksAssembly)"
+  />
 
-  <Target Condition="'$(MgcbMSBuilderEnabled)' != 'False'" Name="RunMgcbMSBuilder" BeforeTargets="Build">
+  <Target Name="ValidateMgcbMSBuilderProject">
+
+    <Error
+      Text="The MonoGamePlatform is not found in project properties"
+      Condition="'$(MonoGamePlatform)' == ''" />
+
+    <Error
+      Text="The MGCBPath is not found in project properties. Either set it or enable tool usage with UseMgcbTool"
+      Condition="'$(UseMgcbTool)' != 'True' AND '$(MGCBPath)' == ''" />
+
+    <Warning
+      Text="Both UseMgcbTool and MGCBPath properties are available, skipping MGCBPath value"
+      Condition="'$(UseMgcbTool)' == 'True' AND '$(MGCBPath)' != ''" />
+  </Target>
+
+  <Target
+    Name="RunMgcbMSBuilder"
+    Condition="'$(MgcbMSBuilderEnabled)' != 'False'"
+    DependsOnTargets="ValidateMgcbMSBuilderProject">
+
     <PropertyGroup>
-      <MgcbContentRoot Condition="'$(MgcbContentRoot)' == ''">$(MSBuildProjectDirectory)</MgcbContentRoot>
-      <MgcbObjFolder Condition="'$(MgcbObjFolder)' == ''">$(MSBuildProjectDirectory)/$(BaseIntermediateOutputPath)</MgcbObjFolder>
-      <MgcbOutFolder Condition="'$(MgcbOutFolder)' == ''">$(MSBuildProjectDirectory)/$(OutDir)</MgcbOutFolder>
-      <MGCBPath Condition="'$(MGCBPath)' == ''">mgcb</MGCBPath>
-<!--      <UseMgcbTool Condition="'$(UseMgcbTool)' == ''">true</UseMgcbTool>-->
+      <!-- MGCB Tool -->
+      <UseMgcbTool Condition="'$(UseMgcbTool)' == ''">True</UseMgcbTool>
+
+      <!-- Folders -->
+      <MgcbContentFolder Condition="'$(MgcbContentFolder)' == ''">$(MSBuildProjectDirectory)</MgcbContentFolder>
+      <MgcbIntermediateFolder Condition="'$(MgcbIntermediateFolder)' == ''">$(MSBuildProjectDirectory)/$(BaseIntermediateOutputPath)/mgcb-msbuilder/obj</MgcbIntermediateFolder>
+      <MgcbOutputFolder Condition="'$(MgcbOutFolder)' == ''">$(MSBuildProjectDirectory)/$(BaseIntermediateOutputPath)/mgcb-msbuilder/out</MgcbOutputFolder>
+
+      <!-- Build options -->
+      <MgcbDoClean Condition="'$(MgcbDoClean)' == ''">False</MgcbDoClean>
+      <MgcbDoRebuild Condition="'$(MgcbDoRebuild)' == ''">False</MgcbDoRebuild>
+      <MgcbDoIncrementalBuild Condition="'$(MgcbDDoIncrementalBuild)' == ''">False</MgcbDoIncrementalBuild>
+      <MgcbTargetPlatform Condition="'$(MgcbTargetPlatform)' == ''">$(MonoGamePlatform)</MgcbTargetPlatform>
+      <MgcbTargetBuildConfiguration Condition="'$(MgcbTargetBuildConfiguration)' == ''">$(Configuration)</MgcbTargetBuildConfiguration>
+
+      <!-- Other options -->
+      <MgcbDoCompression Condition="'$(MgcbDoCompression)' == ''">False</MgcbDoCompression>
+      <MgcbTargetGraphicsProfile Condition="'$(MgcbTargetGraphicsProfile)' == ''">HiDef</MgcbTargetGraphicsProfile>
     </PropertyGroup>
 
+    <MakeDir Directories="$(MgcbIntermediateFolder)"/>
+    <MakeDir Directories="$(MgcbOutputFolder)"/>
+
     <MgcbMSBuilderTask
-      RootFolder="$(MgcbContentRoot)"
-      ObjFolder="$(MgcbObjFolder)"
-      OutFolder="$(MgcbOutFolder)"
+      UseMgcbTool="$(UseMgcbTool)"
+      MgcbPath="$(MGCBPath)"
+
+      ContentFolder="$(MgcbContentFolder)"
+      IntermediateFolder="$(MgcbIntermediateFolder)"
+      OutputFolder="$(MgcbOutputFolder)"
+
+      DoClean="$(MgcbDoClean)"
+      DoRebuild="$(MgcbDoRebuild)"
+      DoIncrementalBuild="$(MgcbDoIncrementalBuild)"
+      TargetPlatform="$(MgcbTargetPlatform)"
+      TargetBuildConfiguration="$(MgcbTargetBuildConfiguration)"
+
+      DoCompression="$(MgcbDoCompression)"
+      TargetGraphicsProfile="$(MgcbTargetGraphicsProfile)"
+
       BuildItems="@(MgcbItem)"
       Assemblies="@(MgcbAssembly)"
-      MgcbPath="$(MGCBPath)"
     />
-<!--      UseMgcbTool="$(UseMgcbTool)"-->
+
+    <ItemGroup>
+      <ExtraContent
+        Condition="'$(MgcbOutputFolder)' != ''"
+        Include="$(MgcbOutputFolder)\**\*.*">
+        <ContentDir>$(MgcbContentFolder)</ContentDir>
+      </ExtraContent>
+    </ItemGroup>
+  </Target>
+
+  <Target
+    Name="IncludeMgcbMSBuilderContent"
+    DependsOnTargets="RunMgcbMSBuilder"
+    Condition="'$(MgcbMSBuilderEnabled)' != 'False'"
+    Outputs="%(ExtraContent.RecursiveDir)%(ExtraContent.Filename)%(ExtraContent.Extension)"
+    BeforeTargets="PrepareForBuild">
+
+    <PropertyGroup>
+      <IPhoneResourcePrefix Condition="'$(IPhoneResourcePrefix)' == ''">Resources</IPhoneResourcePrefix>
+      <MonoAndroidAssetsPrefix Condition="'$(MonoAndroidAssetsPrefix)' == ''">Assets</MonoAndroidAssetsPrefix>
+
+      <PlatformResourcePrefix Condition="'$(MonoGamePlatform)' == 'MacOSX'">$(MonoMacResourcePrefix)</PlatformResourcePrefix>
+      <PlatformResourcePrefix Condition="'$(MonoGamePlatform)' == 'iOS'">$(IPhoneResourcePrefix)</PlatformResourcePrefix>
+      <PlatformResourcePrefix Condition="'$(MonoGamePlatform)' == 'Android'">$(MonoAndroidAssetsPrefix)</PlatformResourcePrefix>
+      <PlatformResourcePrefix Condition="'$(PlatformResourcePrefix)' != '' And !HasTrailingSlash('$(PlatformResourcePrefix)')">$(PlatformResourcePrefix)\</PlatformResourcePrefix>
+    </PropertyGroup>
+
+    <CreateItem
+      Include="%(ExtraContent.FullPath)"
+      AdditionalMetadata="Link=$(PlatformResourcePrefix)%(ExtraContent.ContentDir)%(ExtraContent.RecursiveDir)%(ExtraContent.Filename)%(ExtraContent.Extension);CopyToOutputDirectory=PreserveNewest"
+      Condition="'%(ExtraContent.Filename)' != ''">
+
+      <Output TaskParameter="Include" ItemName="Content" Condition="'$(MonoGamePlatform)' != 'Android' And '$(MonoGamePlatform)' != 'iOS' And '$(MonoGamePlatform)' != 'MacOSX'" />
+      <Output TaskParameter="Include" ItemName="BundleResource" Condition="'$(MonoGamePlatform)' == 'MacOSX' Or '$(MonoGamePlatform)' == 'iOS'" />
+      <Output TaskParameter="Include" ItemName="AndroidAsset" Condition="'$(MonoGamePlatform)' == 'Android'" />
+    </CreateItem>
+
   </Target>
 
 </Project>
