@@ -33,6 +33,7 @@
     <PropertyGroup>
       <!-- MGCB Tool -->
       <UseMgcbTool Condition="'$(UseMgcbTool)' == ''">True</UseMgcbTool>
+      <MonoGameMGCBAdditionalArguments Condition="'$(MonoGameMGCBAdditionalArguments)' == ''">/quiet</MonoGameMGCBAdditionalArguments>
 
       <!-- Folders -->
       <MgcbContentFolder Condition="'$(MgcbContentFolder)' == ''">$(MSBuildProjectDirectory)</MgcbContentFolder>
@@ -51,12 +52,16 @@
       <MgcbTargetGraphicsProfile Condition="'$(MgcbTargetGraphicsProfile)' == ''">HiDef</MgcbTargetGraphicsProfile>
     </PropertyGroup>
 
+    <RemoveDir Directories="$(MgcbIntermediateFolder)"/>
     <MakeDir Directories="$(MgcbIntermediateFolder)"/>
+
+    <RemoveDir Directories="$(MgcbOutputFolder)"/>
     <MakeDir Directories="$(MgcbOutputFolder)"/>
 
     <MgcbMSBuilderTask
       UseMgcbTool="$(UseMgcbTool)"
       MgcbPath="$(MGCBPath)"
+      AdditionalArguments="$(MonoGameMGCBAdditionalArguments)"
 
       ContentFolder="$(MgcbContentFolder)"
       IntermediateFolder="$(MgcbIntermediateFolder)"
@@ -78,8 +83,8 @@
     <ItemGroup>
       <ExtraContent
         Condition="'$(MgcbOutputFolder)' != ''"
-        Include="$(MgcbOutputFolder)\**\*.*">
-        <ContentDir>$(MgcbContentFolder)</ContentDir>
+        Include="$(MgcbOutputFolder)\**\*.*"
+        Exclude="$(MgcbOutputFolder)\**\*.mgcontent">
       </ExtraContent>
     </ItemGroup>
   </Target>
@@ -103,7 +108,7 @@
 
     <CreateItem
       Include="%(ExtraContent.FullPath)"
-      AdditionalMetadata="Link=$(PlatformResourcePrefix)%(ExtraContent.ContentDir)%(ExtraContent.RecursiveDir)%(ExtraContent.Filename)%(ExtraContent.Extension);CopyToOutputDirectory=PreserveNewest"
+      AdditionalMetadata="Link=$([MSBuild]::MakeRelative($(MgcbOutputFolder), %(ExtraContent.FullPath)));CopyToOutputDirectory=PreserveNewest"
       Condition="'%(ExtraContent.Filename)' != ''">
 
       <Output TaskParameter="Include" ItemName="Content" Condition="'$(MonoGamePlatform)' != 'Android' And '$(MonoGamePlatform)' != 'iOS' And '$(MonoGamePlatform)' != 'MacOSX'" />

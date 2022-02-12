@@ -1,12 +1,22 @@
 ﻿namespace MonoGame.Content.MSBuilder.Task.Commands
 {
+  /// <summary>
+  /// Class that represents logical MGCB command.
+  /// </summary>
   public class MgcbCommand
   {
-    public string[] Args { get; }
-
-    public MgcbCommand(string[] args)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MgcbCommand"/> class.
+    /// </summary>
+    /// <param name="arguments">A set of arguments that represents this MGCB command.</param>
+    public MgcbCommand(string[] arguments)
     {
-      Args = args;
+      Arguments = arguments;
     }
+
+    /// <summary>
+    /// Gets a set of arguments that represents this MGCB command.
+    /// </summary>
+    public string[] Arguments { get; }
   }
 }

@@ -5,10 +5,16 @@ using MonoGame.Content.MSBuilder.Task.Exceptions;
 
 namespace MonoGame.Content.MSBuilder.Task.Commands.Execution
 {
+  /// <summary>
+  /// Base class for a command executor implementation.
+  /// </summary>
   public abstract class MgcbCommandExecutorBase
   {
-    protected abstract Command PrepareCliCommand(MgcbCommand command);
-
+    /// <summary>
+    /// Executes given command.
+    /// </summary>
+    /// <param name="command">A logical command instance.</param>
+    /// <exception cref="MgcbExecutionException">Thrown when exit code of MGCB executable is not succeed or when unexpected exception occured.</exception>
     public void Execute(MgcbCommand command)
     {
       var outputBuilder = new StringBuilder();
@@ -33,5 +39,12 @@ namespace MonoGame.Content.MSBuilder.Task.Commands.Execution
         throw new MgcbExecutionException(outputBuilder.ToString(), errorBuilder.ToString(), ex);
       }
     }
+
+    /// <summary>
+    /// Returns configured and ready-to-execute CLI command using logical command as an input.
+    /// </summary>
+    /// <param name="command">A logical command instance.</param>
+    /// <returns>Configured CLI command to execute.</returns>
+    protected abstract Command PrepareCliCommand(MgcbCommand command);
   }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Microsoft.Build.Framework;
@@ -7,57 +8,120 @@ using MonoGame.Content.MSBuilder.Task.Commands.Execution;
 
 namespace MonoGame.Content.MSBuilder.Task
 {
+  // ReSharper disable once InconsistentNaming
   // ReSharper disable once UnusedType.Global
+
+  /// <summary>
+  /// Task that builds MGCB content items using data provided by MSBuild properties and items.
+  /// </summary>
+  [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = "Used by reflection")]
   public class MgcbMSBuilderTask : Microsoft.Build.Utilities.Task
   {
     // MGCB Tool
 
+    /// <summary>
+    /// Gets or sets a value indicating whether dotnet-mgcb should be used or not.
+    /// If not, <see cref="MgcbPath"/> value is used as a path to the DLL of MGCB executable.
+    /// </summary>
     public bool UseMgcbTool { get; set; }
 
-    public string MgcbPath { get; set; }
+    /// <summary>
+    /// Gets or sets a path to DLL with MGCB executable.
+    /// If <see cref="UseMgcbTool"/> is set to true, this property could be omitted.
+    /// </summary>
+    public string MgcbPath { get; set; } = null!;
+
+    /// <summary>
+    /// Gets or sets additional command line arguments that should be passed to the MGCB executable call.
+    /// </summary>
+    public string AdditionalArguments { get; set; } = null!;
 
     // Folders
 
-    public string ContentFolder { get; set; }
+    /// <summary>
+    /// Gets or sets a path to the root folder for a content.
+    /// By default, project folder of currently building project is used.
+    /// </summary>
+    public string ContentFolder { get; set; } = null!;
 
-    public string IntermediateFolder { get; set; }
+    /// <summary>
+    /// Gets or sets a path to the root folder for a content.
+    /// By default, "obj/mgcb-msbuilder/obj" is used.
+    /// </summary>
+    public string IntermediateFolder { get; set; } = null!;
 
-    public string OutputFolder { get; set; }
+    /// <summary>
+    /// Gets or sets a path to the root folder for a content.
+    /// By default, "obj/mgcb-msbuilder/out" is used.
+    /// </summary>
+    public string OutputFolder { get; set; } = null!;
 
     // Items
 
+    /// <summary>
+    /// Gets or sets a set of content items to build.
+    /// </summary>
     public ITaskItem[]? BuildItems { get; set; }
 
+    /// <summary>
+    /// Gets or sets a set of assemblies that contain custom importer and processor classes.
+    /// </summary>
     public ITaskItem[]? Assemblies { get; set; }
 
     // Build options
 
+    /// <summary>
+    /// Gets or sets a value indicating whether clean should be done on MGCB side.
+    /// </summary>
     public bool DoClean { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether rebuild should be done on MGCB side.
+    /// </summary>
     public bool DoRebuild { get; set; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether incremental build should be used on MGCB side.
+    /// </summary>
     public bool DoIncrementalBuild { get; set; }
 
-    public string TargetPlatform { get; set; }
+    /// <summary>
+    /// Gets or sets target platform for a content.
+    /// </summary>
+    public string TargetPlatform { get; set; } = null!;
 
-    public string TargetBuildConfiguration { get; set; }
+    /// <summary>
+    /// Gets or sets target build configuration for a content.
+    /// </summary>
+    public string TargetBuildConfiguration { get; set; } = null!;
 
     // Other options
 
+    /// <summary>
+    /// Gets or sets a value indicating whether compression should be used or not.
+    /// </summary>
     public bool DoCompression { get; set; }
 
-    public string TargetGraphicsProfile { get; set; }
+    /// <summary>
+    /// Gets or sets target graphics profile for content.
+    /// </summary>
+    public string TargetGraphicsProfile { get; set; } = null!;
 
     /// <inheritdoc />
     public override bool Execute()
     {
       if (BuildItems != null)
       {
-        var builder = new MgcbCommandBuilder(MgcbPath);
+        var builder = new MgcbCommandBuilder();
 
         ApplyCommonOptions(builder);
-        ApplyAssemblies(builder);
-        ApplyContentItems(builder);
+
+        if (Assemblies != null)
+        {
+          ApplyAssemblies(builder, Assemblies);
+        }
+
+        ApplyContentItems(builder, BuildItems);
 
         var command = builder.Complete();
         var commandExecutor = GetCommandExecutor();
@@ -101,24 +165,21 @@ namespace MonoGame.Content.MSBuilder.Task
       return builder;
     }
 
-    private MgcbCommandBuilder ApplyAssemblies(MgcbCommandBuilder builder)
+    private MgcbCommandBuilder ApplyAssemblies(MgcbCommandBuilder builder, IEnumerable<ITaskItem> assemblies)
     {
-      if (Assemblies != null)
-      {
-        var assemblies = Assemblies.Select(assembly => Path.GetFullPath(assembly.ItemSpec, ContentFolder));
+      var fullPathAssemblies = assemblies.Select(assembly => Path.GetFullPath(assembly.ItemSpec, ContentFolder));
 
-        foreach (var assembly in assemblies)
-        {
-          builder.AssemblyReference(assembly);
-        }
+      foreach (var assembly in fullPathAssemblies)
+      {
+        builder.AssemblyReference(assembly);
       }
 
       return builder;
     }
 
-    private MgcbCommandBuilder ApplyContentItems(MgcbCommandBuilder builder)
+    private MgcbCommandBuilder ApplyContentItems(MgcbCommandBuilder builder, IEnumerable<ITaskItem> buildItems)
     {
-      var contentItems = BuildItems.Select(item =>
+      var contentItems = buildItems.Select(item =>
       {
         var sourceFile = item.ItemSpec;
         var destinationFile = Path.Combine(OutputFolder, Path.GetRelativePath(ContentFolder, sourceFile));
@@ -160,24 +221,14 @@ namespace MonoGame.Content.MSBuilder.Task
     {
       if (UseMgcbTool)
       {
-        return new MgcbToolCommandExecutor(ContentFolder);
+        return new MgcbToolCommandExecutor(ContentFolder, AdditionalArguments);
       }
 
-      return new MgcbDllCommandExecutor(ContentFolder, MgcbPath);
+      return new MgcbDllCommandExecutor(ContentFolder, MgcbPath, AdditionalArguments);
     }
 
     private class ContentItem
     {
-      public string SourceFile { get; }
-
-      public string DestinationFile { get; }
-
-      public string Importer { get; }
-
-      public string Processor { get; }
-
-      public IDictionary<string, string> ProcessorParams { get; }
-
       public ContentItem(
         string sourceFile,
         string destinationFile,
@@ -191,6 +242,16 @@ namespace MonoGame.Content.MSBuilder.Task
         Processor = processor;
         ProcessorParams = processorParams;
       }
+
+      public string SourceFile { get; }
+
+      public string DestinationFile { get; }
+
+      public string Importer { get; }
+
+      public string Processor { get; }
+
+      public IDictionary<string, string> ProcessorParams { get; }
 
       public override string ToString()
       {
