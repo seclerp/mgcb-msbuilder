@@ -1,6 +1,6 @@
 ﻿using CliWrap;
 
-namespace MonoGame.Content.MSBuilder.Task.Commands.Execution
+namespace MonoGame.Content.MSBuilder.Commands.Execution
 {
   /// <summary>
   /// Command executor implementation that calls commands using a dotnet-mgcb tool.

@@ -1,4 +1,4 @@
-﻿namespace MonoGame.Content.MSBuilder.Task.Commands
+﻿namespace MonoGame.Content.MSBuilder.Commands
 {
   /// <summary>
   /// Class that represents logical MGCB command.

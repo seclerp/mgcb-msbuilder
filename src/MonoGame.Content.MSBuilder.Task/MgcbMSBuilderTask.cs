@@ -3,8 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Microsoft.Build.Framework;
-using MonoGame.Content.MSBuilder.Task.Commands;
-using MonoGame.Content.MSBuilder.Task.Commands.Execution;
+using MonoGame.Content.MSBuilder.Commands;
+using MonoGame.Content.MSBuilder.Commands.Execution;
 
 namespace MonoGame.Content.MSBuilder.Task
 {

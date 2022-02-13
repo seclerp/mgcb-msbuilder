@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>1.0.1</Version>
+    <Version>1.0.0</Version>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
     <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CliWrap" Version="3.4.1" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.3.0" />
     <PackageReference Include="Microsoft.Build.Framework" Version="16.3.0" />
   </ItemGroup>
@@ -20,4 +20,8 @@
     <None Include="$(OutDir)publish/**/*.*" PackagePath="tasks/$(TargetFramework)" Pack="true" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MonoGame.Content.MSBuilder\MonoGame.Content.MSBuilder.csproj" />
+  </ItemGroup>
+  
 </Project>

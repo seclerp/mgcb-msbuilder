@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MonoGame.Content.MSBuilder.Task.Exceptions
+namespace MonoGame.Content.MSBuilder.Exceptions
 {
   /// <summary>
   /// Exception that may occur during content build process.

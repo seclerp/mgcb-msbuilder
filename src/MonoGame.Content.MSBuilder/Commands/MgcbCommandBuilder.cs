@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace MonoGame.Content.MSBuilder.Task.Commands
+namespace MonoGame.Content.MSBuilder.Commands
 {
   /// <summary>
   /// Class that is responsible for <see cref="MgcbCommand"/> construction.

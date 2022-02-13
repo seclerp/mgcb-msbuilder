@@ -12,9 +12,15 @@ ProjectSection(SolutionItems) = preProject
 	global.json = global.json
 EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleGame", "ExampleGame\ExampleGame.csproj", "{FFB9B6E9-8020-4A17-80F6-D9042162CEC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Content.MSBuilder.TestGame", "MonoGame.Content.MSBuilder.TestGame\MonoGame.Content.MSBuilder.TestGame.csproj", "{FFB9B6E9-8020-4A17-80F6-D9042162CEC3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Content.MSBuilder.Task", "MonoGame.Content.MSBuilder.Task\MonoGame.Content.MSBuilder.Task.csproj", "{A78A89A8-E9C4-4331-B796-B292F6CCECF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Content.MSBuilder", "MonoGame.Content.MSBuilder\MonoGame.Content.MSBuilder.csproj", "{2DF4797F-D1B7-4CA7-BE65-C3F79748F166}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B19A32E2-ED2C-43B9-9F10-A87074D5DA3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Content.MSBuilder.Tests", "MonoGame.Content.MSBuilder.Tests\MonoGame.Content.MSBuilder.Tests.csproj", "{6AA59713-A916-461F-8F85-68BAEC91AC77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,5 +40,17 @@ Global
 		{A78A89A8-E9C4-4331-B796-B292F6CCECF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A78A89A8-E9C4-4331-B796-B292F6CCECF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A78A89A8-E9C4-4331-B796-B292F6CCECF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DF4797F-D1B7-4CA7-BE65-C3F79748F166}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DF4797F-D1B7-4CA7-BE65-C3F79748F166}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DF4797F-D1B7-4CA7-BE65-C3F79748F166}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DF4797F-D1B7-4CA7-BE65-C3F79748F166}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AA59713-A916-461F-8F85-68BAEC91AC77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AA59713-A916-461F-8F85-68BAEC91AC77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AA59713-A916-461F-8F85-68BAEC91AC77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AA59713-A916-461F-8F85-68BAEC91AC77}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FFB9B6E9-8020-4A17-80F6-D9042162CEC3} = {B19A32E2-ED2C-43B9-9F10-A87074D5DA3E}
+		{6AA59713-A916-461F-8F85-68BAEC91AC77} = {B19A32E2-ED2C-43B9-9F10-A87074D5DA3E}
 	EndGlobalSection
 EndGlobal

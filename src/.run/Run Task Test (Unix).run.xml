@@ -2,7 +2,7 @@
   <configuration default="false" name="Run Task Test (Unix)" type="RunExe" factoryName=".NET Executable">
     <option name="EXE_PATH" value="/usr/local/share/dotnet/sdk/6.0.100/MSBuild.dll" />
     <option name="PROGRAM_PARAMETERS" value="/t:Clean;Restore;RunMgcbMSBuilder;IncludeMgcbMSBuilderContent;Build /p:MgcbMSBuilderEnabled=True" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ExampleGame" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/MonoGame.Content.MSBuilder.TestGame" />
     <option name="PASS_PARENT_ENVS" value="1" />
     <option name="USE_EXTERNAL_CONSOLE" value="0" />
     <option name="USE_MONO" value="0" />

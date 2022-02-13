@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MonoGame.Content.MSBuilder.Task.Commands
+namespace MonoGame.Content.MSBuilder.Commands
 {
   /// <summary>
   /// Class that is responsible for a content item configuration.

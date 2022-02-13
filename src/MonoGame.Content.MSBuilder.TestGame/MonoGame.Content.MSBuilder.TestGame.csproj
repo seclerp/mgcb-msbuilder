@@ -3,11 +3,12 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
     <MgcbMSBuilderEnabled Condition="'$(MgcbMSBuilderEnabled)' == ''">False</MgcbMSBuilderEnabled>
     <MgcbMSBuilderTasksDirectory>$(MSBuildThisFileDirectory)../MonoGame.Content.MSBuilder.Task/bin/Debug/netstandard2.1/publish</MgcbMSBuilderTasksDirectory>
+    <RootNamespace>ExampleGame</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>

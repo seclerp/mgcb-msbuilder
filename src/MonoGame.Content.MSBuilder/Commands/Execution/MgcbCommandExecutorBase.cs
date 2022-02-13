@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text;
 using CliWrap;
-using MonoGame.Content.MSBuilder.Task.Exceptions;
+using MonoGame.Content.MSBuilder.Exceptions;
 
-namespace MonoGame.Content.MSBuilder.Task.Commands.Execution
+namespace MonoGame.Content.MSBuilder.Commands.Execution
 {
   /// <summary>
   /// Base class for a command executor implementation.
