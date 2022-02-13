@@ -123,10 +123,10 @@ Each parameter should be presented inside `<MgcbItem>`, ex:
 
 | `.mgcb` parameter | MSBuild alternative                                                                     |
 |-------------------|-----------------------------------------------------------------------------------------|
-| /importer         | Importer                                                                                |
-| /processor        | Processor                                                                               |
-| /processorParam   | Processor_ParamName                                                                     |
-| /build            | Use `Include` attribute with `<MgcbItem>` node. ⚠ Destination part is not supported yet |
+| `/importer`       | `Importer`                                                                              |
+| `/processor`      | `Processor`                                                                             |
+| `/processorParam` | `Processor_ParamName`                                                                   |
+| `/build`          | Use `Include` attribute with `<MgcbItem>` node. ⚠ Destination part is not supported yet |
 
 ### Custom assemblies (`/reference`)
 
