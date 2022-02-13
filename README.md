@@ -77,7 +77,24 @@ but it's still relying on file format described above. It also does not support 
    ```xml
    <Import Project="Content.props" />
    ```
-4. Now build the project - you should see your Content folder, as you usually do with `.mgcb` approach.
+4. **If you use `dotnet-mgcb` tool** for building, it should be installed via
+   `dotnet install dotnet-mgcb` or `dotnet install -g dotnet-mgcb`.
+
+   Then specify `UseMgcbTool` property:
+
+   ```xml
+   <UseMgcbTool>true</UseMgcbTool>
+   ```
+
+   **If you use MonoGame.Content.Builder.Task**, no actions required.
+
+   **If you use custom MGCB executable**, it should be presented inside MGCBPath property:
+
+   ```xml
+   <MGCBPath>/path/to/mgcb.dll></MGCBPath>
+   ```
+
+5. Now build the project - you should see your Content folder, as you usually do with `.mgcb` approach.
 
 ## Integration with existing `MonoGame.Content.Builder.Task`
 
