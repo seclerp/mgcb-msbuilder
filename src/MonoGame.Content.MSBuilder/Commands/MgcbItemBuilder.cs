@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MonoGame.Content.MSBuilder.Helpers;
 
 namespace MonoGame.Content.MSBuilder.Commands
 {
@@ -25,8 +26,12 @@ namespace MonoGame.Content.MSBuilder.Commands
     {
       _parentBuilder = parentBuilder;
       _parentArguments = parentArguments;
-      _sourcePath = sourcePath;
-      _destinationPath = destinationPath;
+      _sourcePath = PathHelper.NormalizeSeparators(sourcePath);
+
+      if (destinationPath != null)
+      {
+        _destinationPath = PathHelper.NormalizeSeparators(destinationPath);
+      }
     }
 
     /// <summary>

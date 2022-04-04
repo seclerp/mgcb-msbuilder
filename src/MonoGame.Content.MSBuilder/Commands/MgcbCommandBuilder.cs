@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Text;
+using MonoGame.Content.MSBuilder.Helpers;
 
 namespace MonoGame.Content.MSBuilder.Commands
 {
@@ -17,6 +18,7 @@ namespace MonoGame.Content.MSBuilder.Commands
     /// <returns>Updated instance of <see cref="MgcbCommandBuilder"/>.</returns>
     public MgcbCommandBuilder WorkingDirectory(string workingDir)
     {
+      workingDir = PathHelper.NormalizeSeparators(workingDir);
       _arguments.AddLast($"/workingDir:\"{workingDir}\"");
 
       return this;
@@ -29,6 +31,7 @@ namespace MonoGame.Content.MSBuilder.Commands
     /// <returns>Updated instance of <see cref="MgcbCommandBuilder"/>.</returns>
     public MgcbCommandBuilder OutputDirectory(string outputDir)
     {
+      outputDir = PathHelper.NormalizeSeparators(outputDir);
       _arguments.AddLast($"/outputDir:\"{outputDir}\"");
 
       return this;
@@ -41,6 +44,7 @@ namespace MonoGame.Content.MSBuilder.Commands
     /// <returns>Updated instance of <see cref="MgcbCommandBuilder"/>.</returns>
     public MgcbCommandBuilder IntermediateDirectory(string intermediateDir)
     {
+      intermediateDir = PathHelper.NormalizeSeparators(intermediateDir);
       _arguments.AddLast($"/intermediateDir:\"{intermediateDir}\"");
 
       return this;
@@ -86,6 +90,7 @@ namespace MonoGame.Content.MSBuilder.Commands
     /// <returns>Updated instance of <see cref="MgcbCommandBuilder"/>.</returns>
     public MgcbCommandBuilder AssemblyReference(string assemblyReference)
     {
+      assemblyReference = PathHelper.NormalizeSeparators(assemblyReference);
       _arguments.AddLast($"/reference:\"{assemblyReference}\"");
 
       return this;
@@ -152,10 +157,21 @@ namespace MonoGame.Content.MSBuilder.Commands
     /// <summary>
     /// Finish building process.
     /// </summary>
+    /// <param name="command">A command to be executed.</param>
+    /// <param name="additionalArguments">Optional MGCB arguments.</param>
     /// <returns>Created command instance.</returns>
-    public MgcbCommand Complete()
+    public string Complete(string command, string? additionalArguments = null)
     {
-      return new MgcbCommand(_arguments.ToArray());
+      var resultBuilder = new StringBuilder(command);
+
+      if (!string.IsNullOrWhiteSpace(additionalArguments))
+      {
+        resultBuilder.Append($" {additionalArguments}");
+      }
+
+      resultBuilder.Append($" {string.Join(" ", _arguments)}");
+
+      return resultBuilder.ToString();
     }
   }
 }

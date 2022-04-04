@@ -21,11 +21,9 @@ namespace MonoGame.Content.MSBuilder.Exceptions
     /// <summary>
     /// Initializes a new instance of the <see cref="MgcbExecutionException"/> class.
     /// </summary>
-    /// <param name="output">Standard output of the MGCB command.</param>
-    /// <param name="error">Error output of the MGCB command.</param>
     /// <param name="inner">Inner exception instance.</param>
-    public MgcbExecutionException(string output, string error, Exception inner)
-      : base($"Error executing MGCB command:\nOutput: {output}\nError: {error}", inner)
+    public MgcbExecutionException(Exception inner)
+      : base($"Error executing MGCB command", inner)
     {
     }
   }

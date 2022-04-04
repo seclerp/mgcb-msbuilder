@@ -78,7 +78,14 @@
 
       BuildItems="@(MgcbItem)"
       Assemblies="@(MgcbAssembly)"
-    />
+    >
+      <Output TaskParameter="CliCommand" PropertyName="ResultingCliCommand"/>
+    </MgcbMSBuilderTask>
+
+    <Exec
+      Condition="'$(ResultingCliCommand)' != ''"
+      Command="$(ResultingCliCommand)"
+      WorkingDirectory="$(MgcbContentFolder)" />
 
     <ItemGroup>
       <ExtraContent

@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Microsoft.Build.Framework;
 using MonoGame.Content.MSBuilder.Commands;
-using MonoGame.Content.MSBuilder.Commands.Execution;
 
 namespace MonoGame.Content.MSBuilder.Task
 {
@@ -107,29 +107,41 @@ namespace MonoGame.Content.MSBuilder.Task
     /// </summary>
     public string TargetGraphicsProfile { get; set; } = null!;
 
+    /// <summary>
+    /// Gets or sets resulting command with arguments.
+    /// </summary>
+    [Output]
+    public string CliCommand { get; set; } = null!;
+
     /// <inheritdoc />
     public override bool Execute()
     {
-      if (BuildItems != null)
+      try
       {
-        var builder = new MgcbCommandBuilder();
-
-        ApplyCommonOptions(builder);
-
-        if (Assemblies != null)
+        if (BuildItems != null)
         {
-          ApplyAssemblies(builder, Assemblies);
+          var builder = new MgcbCommandBuilder();
+
+          ApplyCommonOptions(builder);
+
+          if (Assemblies != null)
+          {
+            ApplyAssemblies(builder, Assemblies);
+          }
+
+          ApplyContentItems(builder, BuildItems);
+
+          CliCommand = builder.Complete(UseMgcbTool ? "mgcb" : $"dotnet {MgcbPath}", AdditionalArguments);
         }
 
-        ApplyContentItems(builder, BuildItems);
-
-        var command = builder.Complete();
-        var commandExecutor = GetCommandExecutor();
-
-        commandExecutor.Execute(command);
+        return true;
+      }
+      catch (Exception exception)
+      {
+        BuildEngine.LogErrorEvent(new BuildErrorEventArgs("MGCB", "MG0001", $"{nameof(MgcbMSBuilderTask)}.cs", 0, 0, 0, 0, exception.Message, "MGCB Error", nameof(MgcbMSBuilderTask)));
       }
 
-      return true;
+      return false;
     }
 
     private MgcbCommandBuilder ApplyCommonOptions(MgcbCommandBuilder builder)
@@ -182,7 +194,7 @@ namespace MonoGame.Content.MSBuilder.Task
       var contentItems = buildItems.Select(item =>
       {
         var sourceFile = item.ItemSpec;
-        var destinationFile = Path.Combine(OutputFolder, Path.GetRelativePath(ContentFolder, sourceFile));
+        var destinationFile = Path.GetRelativePath(ContentFolder, sourceFile);
         var importer = item.GetMetadata("Importer");
         var processor = item.GetMetadata("Processor");
         var processorParams = new Dictionary<string, string>();
@@ -215,16 +227,6 @@ namespace MonoGame.Content.MSBuilder.Task
       }
 
       return builder;
-    }
-
-    private MgcbCommandExecutorBase GetCommandExecutor()
-    {
-      if (UseMgcbTool)
-      {
-        return new MgcbToolCommandExecutor(ContentFolder, AdditionalArguments);
-      }
-
-      return new MgcbDllCommandExecutor(ContentFolder, MgcbPath, AdditionalArguments);
     }
 
     private class ContentItem
