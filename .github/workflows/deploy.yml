@@ -38,4 +38,4 @@ jobs:
     - name: 🏗 NuGet Push
       env:
         NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
-      run: dotnet nuget push "../out/*.nupkg" --api-key $NUGET_TOKEN
+      run: dotnet nuget push "../out/*.nupkg" --api-key $NUGET_TOKEN --source https://api.nuget.org/v3/index.json
