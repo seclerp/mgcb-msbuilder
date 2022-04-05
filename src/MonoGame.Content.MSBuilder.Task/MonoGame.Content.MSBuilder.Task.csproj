@@ -21,7 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MonoGame.Content.MSBuilder\MonoGame.Content.MSBuilder.csproj" />
+    <ProjectReference Include="..\MonoGame.Content.MSBuilder\MonoGame.Content.MSBuilder.csproj"
+                      PrivateAssets="All" />
   </ItemGroup>
-  
+
 </Project>
