@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/Repo/">
+    <File Path="../.gitignore" />
+    <File Path="../README.md" />
+  </Folder>
+  <Folder Name="/SolutionItems/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="global.json" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="MonoGame.Content.MSBuilder.TestGame/MonoGame.Content.MSBuilder.TestGame.csproj" />
+    <Project Path="MonoGame.Content.MSBuilder.Tests/MonoGame.Content.MSBuilder.Tests.csproj" />
+  </Folder>
+  <Project Path="MonoGame.Content.MSBuilder.Task/MonoGame.Content.MSBuilder.Task.csproj" />
+  <Project Path="MonoGame.Content.MSBuilder/MonoGame.Content.MSBuilder.csproj" />
+</Solution>
